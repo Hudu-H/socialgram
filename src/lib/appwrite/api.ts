@@ -1,9 +1,9 @@
-import { ID } from "appwrite";
+import { Query } from "appwrite";
 
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
 import { IUpdatePost, INewPost, INewUser, IUpdateUser } from "@/types";
 
-// SIGN UP NEW USER FUNCTIONALISTY
+// CREATE USER ACCOUNT
 export async function createUserAccount(user: INewUser) {
     try {
         const newAccount = await account.create(
@@ -38,7 +38,7 @@ export async function saveUserToDB(user: {
     name: string;
     email: string;
     username?: string;
-    imageUrl: URL | string; // FIXME 
+    imageUrl: URL | string; // FIXME:
 
 }) {
     try {
@@ -53,3 +53,40 @@ export async function saveUserToDB(user: {
         console.log(error);
     }
 }
+
+// SIGN IN USER
+export async function signInAccount(user: {
+    email: string;
+    password: string;
+}) {
+    try {
+        const session = await account.createEmailPasswordSession(user.email, user.password);
+
+        return session;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+ // CHECK AUTH CURRENT USER 
+ export async function getCurrentUser() {
+    try {
+        const currentAccount = await account.get();
+
+        // check if there is no current account
+        if(!currentAccount) throw Error;
+
+        const currentUser = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.equal('accountId', currentAccount.$id)]
+        )
+
+        // check if the is no current user
+        if (!currentUser) throw Error;
+
+        return currentUser.documents[0]
+    } catch (error) {
+        console.log(error);
+    }
+ }
