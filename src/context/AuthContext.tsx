@@ -51,6 +51,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated(true);
         return true;
       }
+
       return false;
     } catch (error) {
       console.log(error);

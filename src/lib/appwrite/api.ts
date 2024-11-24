@@ -1,4 +1,4 @@
-import { Query } from "appwrite";
+import { ID,Query } from "appwrite";
 
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
 import { IUpdatePost, INewPost, INewUser, IUpdateUser } from "@/types";
@@ -21,11 +21,11 @@ export async function createUserAccount(user: INewUser) {
             accountId: newAccount.$id,
             name: user.name,
             email: user.email,
-            imageUrl: avatarUrl,
             username: user.username,
+            imageUrl: avatarUrl, 
         });
 
-        return newUser;
+        return newUser; 
     } catch (error) {
         console.log(error)
         return error;
@@ -38,7 +38,7 @@ export async function saveUserToDB(user: {
     name: string;
     email: string;
     username?: string;
-    imageUrl: URL | string; // FIXME:
+    imageUrl: URL | string;
 
 }) {
     try {
@@ -68,13 +68,15 @@ export async function signInAccount(user: {
     }
 }
 
+
+
  // CHECK AUTH CURRENT USER 
  export async function getCurrentUser() {
     try {
         const currentAccount = await account.get();
 
         // check if there is no current account
-        if(!currentAccount) throw Error;
+        if(!currentAccount) throw new Error;
 
         const currentUser = await databases.listDocuments(
             appwriteConfig.databaseId,
@@ -82,7 +84,7 @@ export async function signInAccount(user: {
             [Query.equal('accountId', currentAccount.$id)]
         )
 
-        // check if the is no current user
+        
         if (!currentUser) throw Error;
 
         return currentUser.documents[0]
