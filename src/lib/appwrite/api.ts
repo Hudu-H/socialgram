@@ -103,3 +103,68 @@ export async function signInAccount(user: {
         console.log(error);
     }
   }
+
+
+  // CREATE POST
+  export async function createPost(post: INewPost) {
+    try {
+
+        // upload file to storage
+        const uploadedFile = await uploadFile(post.file[0]);
+
+        if(!uploadedFile) throw Error;
+
+        // get file url
+        const fileUrl =  getFilePreview(uploadedFile.$id)
+        if(!fileUrl) {
+            await deleteFile(uploadedFile.$id);
+            throw Error;
+        }
+
+        // convert tags to array
+        const tags = post.tags?.replace(/ /g, '').split(' , ') || [];
+
+
+        // create post
+        const newPost = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            ID.unique(),
+            {
+                creator: post.userId,
+                caption: post.caption,
+                imageId: uploadedFile.$id,
+                imageUrl: fileUrl,
+                location: post.location,
+                tags: tags,
+            }
+        )
+        if(!newPost) {
+            await deleteFile(uploadedFile.$id);
+            throw Error;
+        }
+        
+            return newPost;
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  // UPLOAD FILE
+  export async function uploadFile() {}
+
+
+
+  // GET FILE PREVIEW
+  export async function getFilePreview() {
+
+  }
+
+  // DELETE FILE
+  export async function deleteFile() {}
+
+
+  // GET POSTS BY ID
+  export async function getPostById() {
+    
+  }
