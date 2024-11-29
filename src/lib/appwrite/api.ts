@@ -3,7 +3,7 @@ import { ID,ImageGravity,Query } from "appwrite";
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
 import { IUpdatePost, INewPost, INewUser, IUpdateUser } from "@/types";
 
-// CREATE USER ACCOUNT
+// CREATE USER 
 export async function createUserAccount(user: INewUser) {
     try {
         const newAccount = await account.create(
@@ -69,13 +69,23 @@ export async function signInAccount(user: {
 }
 
 
+    // GET ACCOUNT
+    export async function getAccount(){
+        try {
+            const currentAccount = await account.get();
+
+            return currentAccount;
+        } catch (error) {
+            console.log("Error getting account");
+        }
+    }
+
 
  // CHECK AUTH CURRENT USER 
  export async function getCurrentUser() {
     try {
-        const currentAccount = await account.get();
+        const currentAccount = await getAccount();
 
-        // check if there is no current account
         if(!currentAccount) throw new Error;
 
         const currentUser = await databases.listDocuments(
@@ -89,11 +99,12 @@ export async function signInAccount(user: {
 
         return currentUser.documents[0]
     } catch (error) {
-        console.log(error);
+        console.log("Failed to get current user");
+        return null;
     }
  }
 
- // SIGN OUT ACCOUNT
+ // SIGN OUT USER
   export async function signOutAccount() {
     try {
         const session = await account.deleteSession("current");
@@ -105,11 +116,13 @@ export async function signInAccount(user: {
   }
 
 
+  /**** POSTS ****/
+
   // CREATE POST
   export async function createPost(post: INewPost) {
     try {
 
-        // upload file to storage
+        // upload file to appwrite(storage)
         const uploadedFile = await uploadFile(post.file[0]);
 
         if(!uploadedFile) throw Error;
@@ -121,7 +134,7 @@ export async function signInAccount(user: {
             throw Error;
         }
 
-        // convert tags to array
+        // convert tags into array
         const tags = post.tags?.replace(/ /g, '').split(' , ') || [];
 
 
@@ -163,7 +176,7 @@ export async function signInAccount(user: {
 
         return uploadedFile;
     } catch (error) {
-        console.log(error);
+        console.log("file upload failed:", error);
     }
   }
 
@@ -190,22 +203,83 @@ export async function signInAccount(user: {
   }
 
   // DELETE FILE
-  export async function deleteFile(fileId: string) {}
+  export async function deleteFile(fileId: string) {
+    try {
+        await storage.deleteFile(appwriteConfig.storageId, fileId);
+
+
+        return { status: "ok"}
+    } catch (error) {
+        console.log(error);
+    }
+  }
 
 
 
 /***** POSTS ****/
 
   // GET POSTS 
-  export async function searchPosts() {}
+  export async function searchPosts(searchTerm: string) {
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            [Query.search('caption', searchTerm,)]
+        );
+
+        if(!posts) throw Error;
+
+
+        return posts;
+    } catch (error) {
+        console.log("Post not found:", error);
+    }
+  }
 
 
   // GET INFINITE POSTS
-  export async function getInfinitePosts() {}
+  export async function getInfinitePosts({pageParam}: {pageParam: number}) {
+      const queries: any[] = [Query.orderDesc('updatedAt'), Query.limit(10)];
+
+      if (pageParam) {
+          queries.push(Query.cursorAfter(pageParam.toString()))
+      }
+
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            queries,
+        )
+
+        if(!posts) throw Error;
+
+        return posts;
+    } catch (error) {
+        console.log(error);
+    }
+  }
 
 
   // GET POST BY ID
-export async function getPostById() {}
+export async function getPostById(postId?: string) {
+    if(!postId) throw Error;
+
+    try {
+        const post = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            postId,
+        )
+
+        if(!post) throw Error;
+
+
+        return post;
+    } catch (error) {
+        console.log("can't find post")
+    }
+}
 
 
 // UPDATE POST
