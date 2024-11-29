@@ -1,4 +1,4 @@
-import { ID,Query } from "appwrite";
+import { ID,ImageGravity,Query } from "appwrite";
 
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
 import { IUpdatePost, INewPost, INewUser, IUpdateUser } from "@/types";
@@ -38,7 +38,7 @@ export async function saveUserToDB(user: {
     name: string;
     email: string;
     username?: string;
-    imageUrl: URL | string;
+    imageUrl: URL;
 
 }) {
     try {
@@ -146,25 +146,110 @@ export async function signInAccount(user: {
         
             return newPost;
     } catch (error) {
+        console.log("Error creating post:", error);
+    }
+  }
+
+  /***** FILE ****/
+
+  // UPLOAD FILE
+  export async function uploadFile( file: File) {
+    try {
+        const uploadedFile = await storage.createFile(
+            appwriteConfig.storageId,
+            ID.unique(),
+            file,
+        )
+
+        return uploadedFile;
+    } catch (error) {
         console.log(error);
     }
   }
 
-  // UPLOAD FILE
-  export async function uploadFile() {}
 
 
+  // GET FILE PREVIEW/URL
+  export function getFilePreview(fileId: string) {
+    try {
+        const fileUrl = storage.getFilePreview(
+            appwriteConfig.storageId,
+            fileId,
+            2000,
+            2000,
+            "center" as ImageGravity,
+            100,
+        );
 
-  // GET FILE PREVIEW
-  export async function getFilePreview() {
+        if(!fileUrl) throw Error("File not found");
 
+        return fileUrl;
+    } catch (error) {
+        console.log("Error fetching file preview", error);
+    }
   }
 
   // DELETE FILE
-  export async function deleteFile() {}
+  export async function deleteFile(fileId: string) {}
 
 
-  // GET POSTS BY ID
-  export async function getPostById() {
-    
-  }
+
+/***** POSTS ****/
+
+  // GET POSTS 
+  export async function searchPosts() {}
+
+
+  // GET INFINITE POSTS
+  export async function getInfinitePosts() {}
+
+
+  // GET POST BY ID
+export async function getPostById() {}
+
+
+// UPDATE POST
+export async function updatePost() {}
+
+
+// DELETE POST
+export async function deletePost() {}
+
+
+// LIKE / UNLIKE POST
+export async function likePost() {}
+
+
+// SAVE POST 
+export async function savePost() {}
+
+
+// DELETE SAVED POST
+export async function deleteSavedPost() {}
+
+
+// GET USER'S POSTS
+
+export async function getUserPosts() {}
+
+
+// GET POPULAR POSTS / HIGHEST LIKE COUNT
+
+
+/***** GET USERS ****/
+export async function getUsers() {}
+
+
+
+
+// GET USER BY ID
+export async function getUserById() {}
+
+
+
+// UPDATE USER
+
+export async function updateUser() {}
+
+
+
