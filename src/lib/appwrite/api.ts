@@ -15,7 +15,8 @@ export async function createUserAccount(user: INewUser) {
 
     if (!newAccount) throw Error;
 
-    const avatarUrl = avatars.getInitials(user.name);
+    const avatarUrlString = avatars.getInitials(user.name);
+    const avatarUrl = new URL(avatarUrlString);
 
     const newUser = await saveUserToDB({
       accountId: newAccount.$id,
@@ -431,7 +432,7 @@ export async function getRecentPosts() {
     const posts = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
-      [Query.orderDesc("$createdAt"), Query.limit(10)]
+      [Query.orderDesc("$createdAt"), Query.limit(15)]
     );
 
     if (!posts) throw Error;
