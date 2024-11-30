@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Models } from "appwrite";
+import { useNavigate } from "react-router-dom";
 
 // INTERNAL IMPORTS
 import { Button } from "@/components/ui/button";
@@ -27,9 +28,11 @@ type PostFormProps = {
 
 // FORM POST FUNCTION
 const PostForm = ({ post }: PostFormProps) => {
-  const { mutateAsync: createPost, isPending: isLoading } = useCreatePost();
+  const { mutateAsync: createPost, isPending: isLoadingCreate } =
+    useCreatePost();
   const { user } = useUserContext();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof PostValidation>>({
@@ -43,17 +46,19 @@ const PostForm = ({ post }: PostFormProps) => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof PostValidation>) {
+  async function onSubmit(values: z.infer<typeof PostValidation>) {
     const newPost = await createPost({
       ...values,
       userId: user.id,
     });
 
     if (!newPost) {
-      return toast({
+      toast({
         title: " Please try again",
       });
     }
+
+    navigate("/");
   }
 
   return (
