@@ -185,6 +185,7 @@ export const useLikePost = () => {
 // SAVE POST
 export const useSavePost = () => {
     const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({ userId, postId }: { userId: string; postId: string }) =>
       savePost(userId, postId),
