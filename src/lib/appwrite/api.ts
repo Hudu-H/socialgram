@@ -363,6 +363,8 @@ export async function likePost(postId: string, likesArray: string[]) {
     );
 
     if (!updatedPost) throw Error;
+
+    return updatedPost; 
   } catch (error) {
     console.log(error);
   }
@@ -377,13 +379,13 @@ export async function savePost(userId: string, postId: string) {
       ID.unique(),
       {
         user: userId,
-        postId: postId,
+        post: postId,
       }
     );
 
     if (!updatePost) throw Error;
 
-    return updatedPost;
+    return updatedPost; 
   } catch (error) {
     console.log("Error saving post:", error);
   }
@@ -395,7 +397,7 @@ export async function deleteSavedPost(savedRecordId: string) {
     const statusCode = await databases.deleteDocument(
       appwriteConfig.databaseId,
       appwriteConfig.savesCollectionId,
-      savedRecordId
+      savedRecordId,
     );
 
     if (!statusCode) throw Error;
@@ -543,3 +545,6 @@ export async function updateUser(user: IUpdateUser) {
     console.log(error);
   }
 }
+
+// IMPLEMENT COMMENT SECTIONS LATER
+export async function createComment() {};
