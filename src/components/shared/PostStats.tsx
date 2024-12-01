@@ -1,23 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Models } from "appwrite";
 
 // internal imports
-import { useUserContext } from "@/context/AuthContext";
 import {
   useDeleteSavedPost,
+  useGetCurrentUser,
   useLikePost,
   useSavePost,
 } from "@/lib/react-query/queriesAndMutations";
 import { checkIsLiked } from "@/lib/utils";
 
 type PostStatsProps = {
-  post: Models.Document;
+  post?: Models.Document;
   userId: string;
 };
 
 const PostStats = ({ post, userId }: PostStatsProps) => {
   // know number of likes on a post
-  const likesList = post.likes.map((user: Models.Document) => user.$id);
+  const likesList = post?.likes.map((user: Models.Document) => user.$id);
 
   const [likes, setLikes] = useState(likesList);
   const [isSaved, setIsSaved] = useState(false);
@@ -28,7 +28,16 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
   const { mutate: deleteSavedPost } = useDeleteSavedPost();
 
   /// know current user
-  const { data: currentUser } = useUserContext();
+  const { data: currentUser } = useGetCurrentUser();
+
+  // save post to record
+  const savedPostRecord = currentUser?.save.find(
+    (record: Models.Document) => record.post.$id === post?.$id
+  );
+
+  useEffect(() => {
+    setIsSaved(savedPostRecord ? true : false);
+  }, [currentUser]);
 
   // handle like post
   const handleLikePost = (e: React.MouseEvent) => {
@@ -45,11 +54,23 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
       : newLikes.push(userId);
 
     setLikes(newLikes);
-    likePost({ postId: post.$id, likesArray: newLikes });
+    likePost({ postId: post?.$id || "", likesArray: newLikes });
   };
 
   // handle save post
-  const handleSavePost = () => {};
+  const handleSavePost = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    // to unsave post if toggled twice
+    if (savedPostRecord) {
+      setIsSaved(false);
+      deleteSavedPost(savedPostRecord.$id);
+    } else {
+      // save post
+      savePost({ postId: post?.$id || "", userId });
+      setIsSaved(true);
+    }
+  };
 
   return (
     <div className="flex items-center justify-between z-20">

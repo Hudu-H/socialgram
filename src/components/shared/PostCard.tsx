@@ -61,8 +61,8 @@ const PostCard = ({ post }: PostCardProps) => {
         <div className="small-medium lg:base-medium py-5">
           <p>{post.caption}</p>
           <ul className="flex mt-2 gap-1">
-            {post.tags.map((tag: string) => (
-              <li key={tag} className="text-light-3">
+            {post.tags.map((tag: string, index: string) => (
+              <li key={`${tag}${index}`} className="small-regular text-light-3">
                 #{tag}
               </li>
             ))}
