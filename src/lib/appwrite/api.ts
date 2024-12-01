@@ -280,7 +280,7 @@ export async function updatePost(post: IUpdatePost) {
       const uploadedFile = await uploadFile(post.file[0]);
       if (!uploadedFile) throw Error;
 
-      // get new file url
+      // get file url
       const fileUrl = getFilePreview(uploadedFile.$id);
       if (!fileUrl) {
         await deleteFile(uploadedFile.$id);
@@ -310,10 +310,7 @@ export async function updatePost(post: IUpdatePost) {
     // failed to update post
     if (!updatedPost) {
       // delete new file that was uploaded
-      if (hasFileToUpdate) {
         await deleteFile(image.imageId);
-      }
-
       // if no new file was uploaded, throw error
       throw Error;
     }
@@ -364,7 +361,7 @@ export async function likePost(postId: string, likesArray: string[]) {
 
     if (!updatedPost) throw Error;
 
-    return updatedPost; 
+    return updatedPost;
   } catch (error) {
     console.log(error);
   }
@@ -385,7 +382,7 @@ export async function savePost(userId: string, postId: string) {
 
     if (!updatePost) throw Error;
 
-    return updatedPost; 
+    return updatedPost;
   } catch (error) {
     console.log("Error saving post:", error);
   }

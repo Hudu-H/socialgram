@@ -8,7 +8,7 @@ type FileUploaderProps = {
 };
 
 const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
-  const [fileUrl, setFileUrl] = useState("");
+  const [fileUrl, setFileUrl] = useState(mediaUrl); // set mediaUrl as default state to populate fileUrl on post edit
   const [file, setFile] = useState<File[]>([]);
 
   // ACCEPT FILES ON DROP

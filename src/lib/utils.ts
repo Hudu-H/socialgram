@@ -27,7 +27,9 @@ export function formatDateString(dateString: string) {
 
 
 // format date string
-export function formatDate(dateString: string): string {
+export function formatDate(dateString: string | undefined): string {
+  if (!dateString) return "Unknown date";
+
   const inputDate = new Date(dateString);
   const now = new Date();
   const diffMs = now.getTime() - inputDate.getTime(); // Difference in milliseconds
