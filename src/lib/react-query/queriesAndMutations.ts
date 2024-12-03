@@ -68,7 +68,7 @@ export const useCreatePost = () => {
 // GET POSTS
 export const useGetPosts = () => {
   // check useInfiniteQuery
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
     queryFn: getInfinitePosts as any,
     getNextPageParam: (lastPage: any) => {

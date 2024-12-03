@@ -26,8 +26,8 @@ const Explore = () => {
   }
 
   // show no post or all post
-  const shouldShowSearchResults = searchValue != "";
-  const shouldShowPost =
+  const shouldShowSearchResults = searchValue !== "";
+  const shouldShowPosts =
     !shouldShowSearchResults &&
     posts.pages.every((item) => item.documents.length === 0);
 
@@ -69,7 +69,7 @@ const Explore = () => {
       <div className="flex flex-wrap gap-9 w-full max-w-5xl">
         {shouldShowSearchResults ? (
           <SearchResults />
-        ) : shouldShowPost ? (
+        ) : shouldShowPosts ? (
           <p className="text-light-center text-4 mt-10 w-full">End of posts</p>
         ) : (
           posts.pages.map((item, index) => (
