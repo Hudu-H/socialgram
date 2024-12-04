@@ -129,7 +129,7 @@ export async function createPost(post: INewPost) {
     }
 
     // convert tags into array
-    const tags = post.tags?.replace(/ /g, "").split(" , ") || [];
+    const tags = post.tags?.replace(/ /g, "").split(",") || [];
 
     // create post
     const newPost = await databases.createDocument(
@@ -310,7 +310,7 @@ export async function updatePost(post: IUpdatePost) {
     // failed to update post
     if (!updatedPost) {
       // delete new file that was uploaded
-        await deleteFile(image.imageId);
+      await deleteFile(image.imageId);
       // if no new file was uploaded, throw error
       throw Error;
     }
@@ -394,7 +394,7 @@ export async function deleteSavedPost(savedRecordId: string) {
     const statusCode = await databases.deleteDocument(
       appwriteConfig.databaseId,
       appwriteConfig.savesCollectionId,
-      savedRecordId,
+      savedRecordId
     );
 
     if (!statusCode) throw Error;
@@ -544,4 +544,4 @@ export async function updateUser(user: IUpdateUser) {
 }
 
 // IMPLEMENT COMMENT SECTIONS LATER
-export async function createComment() {};
+export async function createComment() {}

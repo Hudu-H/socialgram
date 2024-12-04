@@ -68,7 +68,7 @@ export const useCreatePost = () => {
 // GET POSTS
 export const useGetPosts = () => {
   // check useInfiniteQuery
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
     queryFn: getInfinitePosts as any,
     getNextPageParam: (lastPage: any) => {
@@ -87,7 +87,7 @@ export const useGetPosts = () => {
 // SEARCH POSTS
 export const useSearchPosts = (searchTerm: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.SEARCH_POSTS],
+    queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerm],
     queryFn: () => searchPosts(searchTerm),
     enabled: !!searchTerm,
   });
