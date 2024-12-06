@@ -1,10 +1,19 @@
-import { Link, useParams } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 
 // internal imports
 import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserById } from "@/lib/react-query/queriesAndMutations";
+import GridPostList from "@/components/shared/GridPostList";
+import LikedPosts from "./LikedPosts";
 
 type StatBlockProps = {
   value: string | number;
@@ -13,16 +22,17 @@ type StatBlockProps = {
 
 // stats for followers & following
 const StatBlock = ({ value, label }: StatBlockProps) => (
-  <div className="flex-center gap-2">
+  <div className="flex-center gap-2 flex-col">
     <p className="small-semibold lg:body-bold text-primary-500">{value}</p>
     <p className="small-medium lg:base-medium text-light-2">{label}</p>
   </div>
 );
 
 const Profile = () => {
-  const { user } = useUserContext();
   // get id from useParams
   const { id } = useParams();
+  const { user } = useUserContext();
+  const { pathname } = useLocation();
 
   const { data: currentUser } = useGetUserById(id || "");
 
@@ -97,6 +107,52 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      {/* render all created posts & liked posts of creator  */}
+      {currentUser.$id === user.id && (
+        <div className="flex max-w-5xl w-full">
+          <Link
+            to={`/profile/${id}`}
+            className={`profile-tab rounded-l-lg ${
+              pathname === `/profile/${id}` && "!bg-dark-3"
+            }`}
+          >
+            <img
+              src={"/assets/icons/posts.svg"}
+              alt="posts"
+              width={20}
+              height={20}
+            />
+            Posts
+          </Link>
+          <Link
+            to={`/profile/${id}/liked-posts`}
+            className={`profile-tab rounded-r-lg ${
+              pathname === `/profile/${id}/liked-posts` && "!bg-dark-3"
+            }`}
+          >
+            <img
+              src={"/assets/icons/like.svg"}
+              alt="like"
+              width={20}
+              height={20}
+            />
+            Liked Posts
+          </Link>
+        </div>
+      )}
+
+      {/* routes to posts & liked posts */}
+      <Routes>
+        <Route
+          index
+          element={<GridPostList posts={currentUser.posts} showUser={false} />}
+        />
+        {currentUser.$id === user.id && (
+          <Route path="/liked-posts" element={<LikedPosts />} />
+        )}
+      </Routes>
+      <Outlet />
     </div>
   );
 };
