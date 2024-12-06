@@ -32,6 +32,7 @@ type PostFormProps = {
 
 // FORM POST FUNCTION
 const PostForm = ({ post, action }: PostFormProps) => {
+  // Query
   const { mutateAsync: createPost, isPending: isLoadingCreate } =
     useCreatePost();
   const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
@@ -71,6 +72,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
       return navigate(`/posts/${post.$id}`);
     }
 
+    // Action
     const newPost = await createPost({
       ...values,
       userId: user.id,
