@@ -11,13 +11,13 @@ import {
 import { checkIsLiked } from "@/lib/utils";
 
 type PostStatsProps = {
-  post?: Models.Document;
+  post: Models.Document;
   userId: string;
 };
 
 const PostStats = ({ post, userId }: PostStatsProps) => {
   // know number of likes on a post
-  const likesList = post?.likes.map((user: Models.Document) => user.$id);
+  const likesList = post?.likes.map((user: Models.Document) => user.$id) || [];
 
   const [likes, setLikes] = useState(likesList);
   const [isSaved, setIsSaved] = useState(false);
@@ -32,11 +32,11 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
   // save post to record
   const savedPostRecord = currentUser?.save.find(
-    (record: Models.Document) => record.post.$id === post?.$id
+    (record: Models.Document) => record.post?.$id === post?.$id
   );
 
   useEffect(() => {
-    setIsSaved(savedPostRecord ? true : false);
+    setIsSaved(!!savedPostRecord);
   }, [currentUser]);
 
   // handle like post
