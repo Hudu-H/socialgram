@@ -4,6 +4,7 @@ import {
   Route,
   Routes,
   useLocation,
+  useNavigate,
   useParams,
 } from "react-router-dom";
 
@@ -33,6 +34,7 @@ const Profile = () => {
   const { id } = useParams();
   const { user } = useUserContext();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const { data: currentUser } = useGetUserById(id || "");
 
@@ -46,6 +48,21 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
+      <div className="hidden md:flex max-w-5xl w-full">
+        <Button
+          onClick={() => navigate(-1)}
+          variant="ghost"
+          className="shad-button_ghost"
+        >
+          <img
+            src={"/assets/icons/back.svg"}
+            alt="back"
+            width={24}
+            height={24}
+          />
+          <p className="small-medium lg:base-medium">Back</p>
+        </Button>
+      </div>
       <div className="profile-inner_container">
         <div className="flex xl:flex-row flex-col flex-1 max-xl:items-center gap-7">
           <img

@@ -3,9 +3,12 @@ import { Models } from "appwrite";
 import GridPostList from "@/components/shared/GridPostList";
 import Loader from "@/components/shared/Loader";
 import { useGetCurrentUser } from "@/lib/react-query/queriesAndMutations";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const SavedPost = () => {
   const { data: currnetUser } = useGetCurrentUser();
+  const navigate = useNavigate();
 
   // define saved posts
   const savedPosts = currnetUser?.save
@@ -19,6 +22,21 @@ const SavedPost = () => {
 
   return (
     <div className="saved-container">
+      <div className="hidden md:flex max-w-5xl w-full">
+        <Button
+          onClick={() => navigate(-1)}
+          variant="ghost"
+          className="shad-button_ghost"
+        >
+          <img
+            src={"/assets/icons/back.svg"}
+            alt="back"
+            width={24}
+            height={24}
+          />
+          <p className="small-medium lg:base-medium">Back</p>
+        </Button>
+      </div>
       <div className="flex w-full gap-2 max-w-5xl">
         <img
           src="/assets/icons/save.svg"

@@ -11,9 +11,12 @@ import {
   useSearchPosts,
 } from "@/lib/react-query/queriesAndMutations";
 import { useInView } from "react-intersection-observer";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Explore = () => {
   const { ref, inview } = useInView();
+  const navigate = useNavigate();
 
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
 
@@ -43,6 +46,21 @@ const Explore = () => {
 
   return (
     <div className="explore-container">
+      <div className="hidden md:flex max-w-5xl w-full">
+        <Button
+          onClick={() => navigate(-1)}
+          variant="ghost"
+          className="shad-button_ghost"
+        >
+          <img
+            src={"/assets/icons/back.svg"}
+            alt="back"
+            width={24}
+            height={24}
+          />
+          <p className="small-medium lg:base-medium">Back</p>
+        </Button>
+      </div>
       <div className="explore-inner_container">
         <h2 className="h3-bold md:h2-bold w-full">Search Posts</h2>
         <div className="flex gap-1 w-full px-4 rounded-lg bg-dark-4">
