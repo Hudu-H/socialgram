@@ -442,6 +442,72 @@ export async function getRecentPosts() {
   }
 }
 
+// CREATE COMMENTS
+// export async function createComment(
+//   postId: string,
+//   newComment: { userId: string; comments: string }
+// ) {
+//   try {
+//     // Fetch the existing post document
+//     const post = await databases.getDocument(
+//       appwriteConfig.databaseId,
+//       appwriteConfig.postCollectionId,
+//       postId
+//     );
+
+//     // Ensure comments array exists; if not, initialize it
+//     const existingComments = post.comments || [];
+
+//     // Add the new comment
+//     const updatedComments = [
+//       ...existingComments,
+//       { ...newComment, createdAt: new Date().toISOString() },
+//     ];
+
+//     // Update the post with the new comments array
+//     const updatedPost = await databases.updateDocument(
+//       appwriteConfig.databaseId,
+//       appwriteConfig.postCollectionId,
+//       postId,
+//       {
+//         comments: updatedComments,
+//       }
+//     );
+
+//     return updatedPost;
+//   } catch (error) {
+//     console.error("Error creating comment:", error);
+//   }
+// }
+
+// GE COMMENTS BY POSTID
+// export async function getCommentsByPostId(postId: string) {
+//   try {
+//     const post = await databases.getDocument(
+//       appwriteConfig.databaseId,
+//       appwriteConfig.postCollectionId,
+//       postId
+//     );
+
+//     if (!post) throw Error;
+
+//     return post.comments || [];
+//   } catch (error) {
+//     console.log("Error fetching comments:", error);
+//     throw error;
+//   }
+// }
+
+// // DELETE COMMENTS
+// export async function deleteComment(postId: string, updatedComments: string[]) {
+//   return await databases.updateDocument(
+//     appwriteConfig.databaseId,
+//     appwriteConfig.postCollectionId,
+//     postId,
+//     { comments: updatedComments }
+//   );
+// }
+
 /***** GET USERS ****/
 export async function getUsers(limit?: number) {
   const queries: any[] = [Query.orderDesc("$createdAt")];
@@ -543,5 +609,4 @@ export async function updateUser(user: IUpdateUser) {
   }
 }
 
-// IMPLEMENT COMMENT SECTIONS LATER
-export async function createComment() {}
+//
