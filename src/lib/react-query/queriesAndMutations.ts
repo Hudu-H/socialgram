@@ -256,3 +256,50 @@ export const useUpdateUser = () => {
     },
   });
 };
+
+// COMMENT SECTION
+
+// export const useCreateComment = () => {
+//   const queryClient = useQueryClient();
+
+//   return useMutation({
+//     mutationFn: ({
+//       postId,
+//       newComment,
+//     }: {
+//       postId: string;
+//       newComment: { userId: string; comments: string };
+//     }) => createComment(postId, newComment),
+//     onSuccess: (_, { postId }) => {
+//       queryClient.invalidateQueries({
+//         queryKey: [QUERY_KEYS.GET_COMMENTS_BY_POST_ID, postId],
+//       });
+//     },
+//   });
+// };
+
+// export const useGetComments = (postId: string) => {
+//   return useQuery({
+//     queryKey: [QUERY_KEYS.GET_COMMENTS_BY_POST_ID, postId],
+//     queryFn: () => getCommentsByPostId(postId),
+//   });
+// };
+
+// export const useDeleteComment = () => {
+//   const queryClient = useQueryClient();
+
+//   return useMutation({
+//     mutationFn: ({
+//       postId,
+//       updatedComments,
+//     }: {
+//       postId: string;
+//       updatedComments: string[];
+//     }) => deleteComment(postId, updatedComments),
+//     onSuccess: (_, { postId }) => {
+//       queryClient.invalidateQueries({
+//         queryKey: [QUERY_KEYS.GET_COMMENTS_BY_POST_ID, postId],
+//       });
+//     },
+//   });
+// };
