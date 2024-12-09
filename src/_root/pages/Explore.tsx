@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 const Explore = () => {
-  const { ref, inview } = useInView();
+  const { ref, inView } = useInView();
   const navigate = useNavigate();
 
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
@@ -27,8 +27,8 @@ const Explore = () => {
 
   // infiite scroll
   useEffect(() => {
-    if (inview && !searchValue) fetchNextPage();
-  }, [inview, searchValue]);
+    if (inView && !searchValue) fetchNextPage();
+  }, [inView, searchValue]);
 
   if (!posts) {
     return (
