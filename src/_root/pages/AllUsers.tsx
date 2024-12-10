@@ -49,8 +49,6 @@ const AllUsers = () => {
       </div>
     </div>
   );
-
-  return <div>AllUsers</div>;
 };
 
 export default AllUsers;
