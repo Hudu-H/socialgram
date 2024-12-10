@@ -67,7 +67,7 @@ const Profile = () => {
         <div className="flex xl:flex-row flex-col flex-1 max-xl:items-center gap-7">
           <img
             src={
-              currentUser.imageUrl || "/assets/icons/profile_placeholder.svg"
+              currentUser.imageUrl || "/assets/icons/profile-placeholder.svg"
             }
             alt="profile"
             className="w-28 h-28 lg:w-36 lg:h-36 rounded-full"
@@ -96,7 +96,7 @@ const Profile = () => {
           <div className="flex justify-center gap-4">
             <div className={`${user.id !== currentUser.$id && "hidden"}`}>
               <Link
-                to={`/update-profile${currentUser.$id}`}
+                to={`/update-profile/${currentUser.$id}`}
                 className={`h-12 px-5 bg-dark-4 flex-center text-light-1 gap-2 rounded-lg ${
                   user.id !== currentUser.$id && "hidden"
                 }`}
@@ -163,7 +163,7 @@ const Profile = () => {
       <Routes>
         <Route
           index
-          element={<GridPostList posts={currentUser.posts} showUser={false} />}
+          element={<GridPostList posts={currentUser.posts} showUser={true} />}
         />
         {currentUser.$id === user.id && (
           <Route path="/liked-posts" element={<LikedPosts />} />

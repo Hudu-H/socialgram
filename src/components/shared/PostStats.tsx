@@ -81,7 +81,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
               ? "/assets/icons/liked.svg"
               : "/assets/icons/like.svg"
           }
-          alt="like post button"
+          alt="like post"
           height={20}
           width={20}
           onClick={handleLikePost}

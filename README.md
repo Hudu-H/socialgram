@@ -55,10 +55,6 @@ All current features funtional, user can create, update, edit and delete post. C
 - [ ] Implement comment UI under PostCard
 - [ ] Testing
 
-## Link to deployed app on vercel
-
-[socialgram](https://socialgram-jherrjxp4-hudus-projects.vercel.app/explore)
-
 ![explore page](public/assets/images/explore.png)
 
 ![signup page](public/assets/images/signup.png)

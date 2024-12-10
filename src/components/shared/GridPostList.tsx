@@ -34,11 +34,16 @@ const GridPostList = ({
             {showUser && (
               <div className="flex flex-1 justify-start items-center gap-2 ">
                 <img
-                  src={post.creator.imageUrl}
+                  src={
+                    (post.creator && post.creator.imageUrl) ||
+                    "/assets/icons/profile-placeholder.svg"
+                  }
                   alt="creator"
                   className="rounded-full w-9 h-9"
                 />
-                <p className="line-clamp-1">{post.creator.name}</p>
+                <p className="line-clamp-1">
+                  {post.creator && post.creator.name}
+                </p>
               </div>
             )}
             {showStats && <PostStats post={post} userId={user.id} />}
